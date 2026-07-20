@@ -1,0 +1,19 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: 8.0.x }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: frontend/noteshub-web/package-lock.json }
+      - run: dotnet restore NotesHub.slnx
+      - run: dotnet build NotesHub.slnx --configuration Release --no-restore
+      - run: dotnet test NotesHub.slnx --configuration Release --no-build
+      - run: npm ci
+        working-directory: frontend/noteshub-web
+      - run: npm run build
+        working-directory: frontend/noteshub-web
+      - run: docker compose build

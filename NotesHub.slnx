@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NotesHub.Api/NotesHub.Api.csproj" />
+    <Project Path="src/NotesHub.Application/NotesHub.Application.csproj" />
+    <Project Path="src/NotesHub.Domain/NotesHub.Domain.csproj" />
+    <Project Path="src/NotesHub.Infrastructure/NotesHub.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NotesHub.IntegrationTests/NotesHub.IntegrationTests.csproj" />
+    <Project Path="tests/NotesHub.UnitTests/NotesHub.UnitTests.csproj" />
+  </Folder>
+</Solution>
