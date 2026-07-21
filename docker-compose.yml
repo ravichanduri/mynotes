@@ -1,6 +1,8 @@
 services:
   postgres:
     image: postgres:16-alpine
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_DB: noteshub
       POSTGRES_USER: noteshub
@@ -11,6 +13,12 @@ services:
       timeout: 5s
       retries: 10
     volumes: [postgres-data:/var/lib/postgresql/data]
+  migrations:
+    build: { context: ., dockerfile: docker/Migrations.Dockerfile }
+    environment:
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=noteshub;Username=noteshub;Password=noteshub
+    depends_on: { postgres: { condition: service_healthy } }
+    restart: "no"
   api:
     build: { context: ., dockerfile: src/NotesHub.Api/Dockerfile }
     environment:
@@ -18,9 +26,9 @@ services:
       ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=noteshub;Username=noteshub;Password=noteshub
       Jwt__Key: CHANGE_THIS_DEVELOPMENT_ONLY_KEY_TO_A_LONG_RANDOM_VALUE_123456
     ports: ["8080:8080"]
-    depends_on: { postgres: { condition: service_healthy } }
+    depends_on: { migrations: { condition: service_completed_successfully } }
   web:
     build: { context: ./frontend/noteshub-web, dockerfile: Dockerfile }
     ports: ["5173:80"]
-    depends_on: [api]
+    depends_on: { api: { condition: service_started } }
 volumes: { postgres-data: {} }

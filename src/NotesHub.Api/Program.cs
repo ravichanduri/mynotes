@@ -25,7 +25,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<NoteRequestValidator>();
 builder.Services.AddCors(o => o.AddPolicy("web", p => p.WithOrigins(builder.Configuration["Cors:Origin"] ?? "http://localhost:5173").AllowAnyHeader().AllowAnyMethod()));
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>(); app.UseSwagger(); app.UseSwaggerUI(); app.UseHttpsRedirection(); app.UseCors("web"); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers();
-using (var scope = app.Services.CreateScope()) { var db = scope.ServiceProvider.GetRequiredService<NotesHubDbContext>(); await db.Database.MigrateAsync(); var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>(); if (!await roles.RoleExistsAsync("Admin")) await roles.CreateAsync(new IdentityRole("Admin")); }
+using (var scope = app.Services.CreateScope()) { var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>(); if (!await roles.RoleExistsAsync("Admin")) await roles.CreateAsync(new IdentityRole("Admin")); }
 app.Run();
 public partial class Program { }
 
