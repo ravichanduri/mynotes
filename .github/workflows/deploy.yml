@@ -34,10 +34,10 @@ jobs:
               --password-stdin
 
             echo "Pulling latest images..."
-            docker compose -f docker-compose.prod.yaml pull
+            docker compose -f docker-compose.yaml pull
 
             echo "Restarting containers..."
-            docker compose -f docker-compose.prod.yaml up -d
+            docker compose -f docker-compose.yaml up -d
 
             echo "Removing unused images..."
             docker image prune -af
