@@ -27,7 +27,7 @@ jobs:
           script: |
             set -e
 
-            # cd /home/ubuntu/mynotes -- docker compose is place at root localtion
+            cd /home/ubuntu
 
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
               -u "${{ secrets.GHCR_USERNAME }}" \
